@@ -5,8 +5,9 @@
 	const vid = document.querySelector('video');
 	
 	const options = {
-		video: true,
-		// facingMode: 'environment'
+		video: {
+			facingMode: 'environment'
+		}
 	};
 	
 	async function initMedia() {
