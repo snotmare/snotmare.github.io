@@ -36,7 +36,10 @@
 			canvas.height = vid.videoHeight;
 			ctx.drawImage(vid, 0,0); // the video
 			
-			let blob = await canvas.toBlob('image/jpeg', 1); // request a Blob from the canvas
+			let blob = await new Promise((res, rej)=>{
+				canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+			});
+
 			info('downloading');
 			download(blob);
 		} catch(error) {
