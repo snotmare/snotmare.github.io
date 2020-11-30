@@ -9,19 +9,25 @@
 		// facingMode: 'environment'
 	};
 	
-	navigator.mediaDevices.getUserMedia(options) // request cam
-		.then(stream => {
+	async function initMedia() {
+		try {
+			info('getting media');
+			let stream = await navigator.mediaDevices.getUserMedia(options); // request cam
+			
+			info('initing canvas');
 			vid.srcObject = stream; // don't use createObjectURL(MediaStream)
-			return vid.play(); // returns a Promise
-		})
-		.then(()=>{ // enable the button
+			await vid.play(); // returns a Promise
+
 			const btn = document.querySelector('button');
 			btn.disabled = false;
 			btn.onclick = e => {
 				takeASnap().then(download);
 			};
-		})
-		.catch(e => logError(e));
+		} catch(error) {
+			info(error);
+		}
+
+	}
 
 	function takeASnap(){
 		const canvas = document.createElement('canvas'); // create a canvas
@@ -43,9 +49,9 @@
 		document.body.appendChild(a);
 		a.click();
 	}
-	
-	function logError(error) {
-		document.getElementById('error').innerHTML = error;
+
+	function info(value) {
+		document.getElementById('output').innerHTML += `${value}<br/>`;
 	}
 </script>
 
@@ -54,6 +60,6 @@
 <body>
 	<button>Save</button>
 	<video id="vid"></video>
-	<div id="error"></div>
+	<div id="output"></div>
 </body>
 </html>
