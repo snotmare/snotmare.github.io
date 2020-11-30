@@ -2,9 +2,8 @@
 <head>
 <script>
 	// https://stackoverflow.com/questions/46882550/how-to-save-a-jpg-image-video-captured-with-webcam-in-the-local-hard-drive-with
-	const vid = document.querySelector('video');
-	
-	const options = {
+	let options = {
+		audio: false,
 		video: {
 			facingMode: 'environment'
 		}
@@ -12,10 +11,14 @@
 	
 	async function initMedia() {
 		try {
+			let supports = navigator.mediaDevices.getSupportedConstraints();
+			info(JSON.stringify(supports));
+
 			info('getting media');
 			let stream = await navigator.mediaDevices.getUserMedia(options); // request cam
 			
 			info('initing canvas');
+			let vid = document.querySelector('video');
 			vid.srcObject = stream; // don't use createObjectURL(MediaStream)
 			await vid.play(); // returns a Promise
 
@@ -33,6 +36,7 @@
 	function takeASnap(){
 		const canvas = document.createElement('canvas'); // create a canvas
 		const ctx = canvas.getContext('2d'); // get its context
+		let vid = document.querySelector('video');
 		canvas.width = vid.videoWidth; // set its size to the one of the video
 		canvas.height = vid.videoHeight;
 		ctx.drawImage(vid, 0,0); // the video
