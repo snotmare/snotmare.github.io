@@ -60,6 +60,27 @@
 		document.getElementById('output').innerHTML += `${value}<br/>`;
 	}
 
+	function upload(input) {
+        if (input.files) {
+			let imagesDiv = document.getElementById('images');
+
+			for(let i = 0; i < input.files.length; i++) {
+				let imageDiv = document.createElement('img');
+				imageDiv.id = `image${i}`;
+				imageDiv.style = 'max-width: 200px; max-height: 150px;'
+				imagesDiv.append(imageDiv);
+
+				let reader = new FileReader();
+
+				reader.onload = function (e) {
+					imageDiv.src = e.target.result;
+				};
+            	
+				reader.readAsDataURL(input.files[i]);
+			}
+        }
+    }
+
 	setTimeout(() => {
 		initMedia();
 	}, 10);
@@ -68,8 +89,17 @@
 </head>
 
 <body>
+	<video id="vid" width="200" height="300"></video>
+	<br/>
+	<br/>
 	<button onclick="save()">Save</button>
-	<video id="vid"></video>
+
+	<br/>
+	<br/>
+	<input type="file" id="upload" name="upload" accept="image/*" multiple onchange="upload(this)">
+
 	<div id="output"></div>
+
+	<div id="images"></div>
 </body>
 </html>
