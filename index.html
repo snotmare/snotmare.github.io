@@ -1,5 +1,7 @@
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <script>
 	// https://stackoverflow.com/questions/46882550/how-to-save-a-jpg-image-video-captured-with-webcam-in-the-local-hard-drive-with
 	let options = {
@@ -11,9 +13,6 @@
 	
 	async function initMedia() {
 		try {
-			let supports = navigator.mediaDevices.getSupportedConstraints();
-			info(JSON.stringify(supports));
-
 			info('getting media');
 			let stream = await navigator.mediaDevices.getUserMedia(options); // request cam
 			
@@ -21,19 +20,13 @@
 			let vid = document.querySelector('video');
 			vid.srcObject = stream; // don't use createObjectURL(MediaStream)
 			await vid.play(); // returns a Promise
-
-			const btn = document.querySelector('button');
-			btn.disabled = false;
-			btn.onclick = e => {
-				takeASnap().then(download);
-			};
 		} catch(error) {
 			info(error);
 		}
 
 	}
 
-	function takeASnap(){
+	function save(){
 		const canvas = document.createElement('canvas'); // create a canvas
 		const ctx = canvas.getContext('2d'); // get its context
 		let vid = document.querySelector('video');
@@ -41,9 +34,9 @@
 		canvas.height = vid.videoHeight;
 		ctx.drawImage(vid, 0,0); // the video
 		
-		return new Promise((res, rej)=>{
-			canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
-		});
+		let blob = await canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+		info('downloading');
+		download(blob);
 	}
 	
 	function download(blob){
@@ -67,7 +60,7 @@
 </head>
 
 <body>
-	<button>Save</button>
+	<button onclick="save()">Save</button>
 	<video id="vid"></video>
 	<div id="output"></div>
 </body>
