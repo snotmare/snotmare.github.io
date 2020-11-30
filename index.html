@@ -27,16 +27,21 @@
 	}
 
 	async function save(){
-		const canvas = document.createElement('canvas'); // create a canvas
-		const ctx = canvas.getContext('2d'); // get its context
-		let vid = document.querySelector('video');
-		canvas.width = vid.videoWidth; // set its size to the one of the video
-		canvas.height = vid.videoHeight;
-		ctx.drawImage(vid, 0,0); // the video
-		
-		let blob = await canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
-		info('downloading');
-		download(blob);
+		try {
+			info('saving');
+			const canvas = document.createElement('canvas'); // create a canvas
+			const ctx = canvas.getContext('2d'); // get its context
+			let vid = document.querySelector('video');
+			canvas.width = vid.videoWidth; // set its size to the one of the video
+			canvas.height = vid.videoHeight;
+			ctx.drawImage(vid, 0,0); // the video
+			
+			let blob = await canvas.toBlob('image/jpeg', 1); // request a Blob from the canvas
+			info('downloading');
+			download(blob);
+		} catch(error) {
+			info(error);
+		}
 	}
 	
 	function download(blob){
