@@ -80,7 +80,7 @@
 			}
         }
     }
-
+//not allowed error request is not allowed by the user agent or the platform of the current context, possibly because the user denied permission
 	setTimeout(() => {
 		initMedia();
 	}, 10);
@@ -89,7 +89,7 @@
 </head>
 
 <body>
-	<video id="vid" width="200" height="300"></video>
+	<video id="vid" width="200" height="300" playsinline></video>
 	<br/>
 	<br/>
 	<button onclick="save()">Save</button>
