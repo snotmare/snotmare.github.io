@@ -63,6 +63,7 @@ async function capture() {
 	let newWidth = vid.width * scale;
 	let newHeight = vid.height * scale;
 
+	info(`original size: ${vid.width}, ${vid.height}`);
 	info(`scaling to: ${newWidth}, ${newHeight}`);
 	
     ctx.drawImage(vid, x, y, newWidth, newHeight);
