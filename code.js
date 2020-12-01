@@ -38,14 +38,14 @@ async function save(){
 }
 
 async function capture() {
-	setMode(MODE_CANVAS);
-
 	let canvas = document.getElementById('canvas');
 	let ctx = canvas.getContext('2d'); // get its context
 	let vid = document.querySelector('video');
-	canvas.width = vid.videoWidth; // set its size to the one of the video
-	canvas.height = vid.videoHeight;
+	// canvas.width = vid.videoWidth; // set its size to the one of the video
+	// canvas.height = vid.videoHeight;
 	ctx.drawImage(vid, 0,0); // the video
+
+	setMode(MODE_CANVAS);
 }
 
 async function retake() {
