@@ -9,13 +9,6 @@ let mode = MODE_VIDEO;
 
 let hiddenCanvas;
 
-let options = {
-	audio: false,
-	video: {
-		facingMode: 'environment'
-	}
-};
-
 async function save(){
 	try {
 		info('saving');
@@ -144,9 +137,19 @@ async function init() {
 	
 	try {
 		info('getting media');
+		
+		let options = {
+			audio: false,
+			video: {
+				facingMode: 'environment',
+				height: { min: 720, ideal: 1080 },
+				width: { min: 1280, ideal: 1920 }
+			}
+		};
+
 		let stream = await navigator.mediaDevices.getUserMedia(options); // request cam
 		
-		info('initing canvas');
+		info('initing video');
 		let vid = document.querySelector('video');
 		vid.srcObject = stream; // don't use createObjectURL(MediaStream)
 		await vid.play(); // returns a Promise
