@@ -123,9 +123,8 @@ function info(value) {
 }
 
 async function init() {
-	setMode(MODE_VIDEO);
-	
 	try {
+		setMode(MODE_VIDEO);
 		info('initing video');
 		let options = {
 			audio: false,
