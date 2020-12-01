@@ -54,7 +54,10 @@ async function capture() {
 	// 	drawImageProp(ctx, image, 0, 0, canvas.width, canvas.height);
 	// }
 
-	drawImageProp(ctx, vid, 0, 0, canvas.width, canvas.height);
+	// drawImageProp(ctx, vid, 0, 0, canvas.width, canvas.height);
+
+	let ratio = (canvas.height / vid.videoHeight) * vid.videoWidth;
+	ctx.drawImage(vid, 0, 0, ratio, canvas.height);
 	// ctx.drawImage(vid, 0, 0); // the video
 }
 
