@@ -70,8 +70,9 @@ async function capture() {
 
 	ctx.drawImage(vid, 0, 0);
 
-	info(`context size: ${ctx.canvas.clientWidth}, ${ctx.canvas.clientWidth}`);
-	info(`canvas size: ${canvas.clientWidth}, ${canvas.clientWidth}`);
+	info(`video size: ${vid.videoWidth}, ${vid.videoHeight}`);
+	info(`context size: ${ctx.canvas.clientWidth}, ${ctx.canvas.clientHeight}`);
+	info(`canvas size: ${canvas.clientWidth}, ${canvas.clientHeight}`);
 }
 
 async function retake() {
