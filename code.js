@@ -6,6 +6,7 @@
 const MODE_VIDEO = 'VIDEO';
 const MODE_CANVAS = 'CANVAS';
 let mode = MODE_VIDEO;
+let videoSupported = true;
 
 let hiddenCanvas;
 
@@ -32,8 +33,14 @@ async function save(){
 	}
 }
 
-async function capture() {
+function capture() {
 	setMode(MODE_CANVAS);
+
+	if(!videoSupported) {
+		loadTestImage();
+		return;
+	}
+
 	let vid = document.querySelector('video');
 	
 	info('capturing full image');
@@ -43,40 +50,51 @@ async function capture() {
 	hiddenCanvas.height = vid.videoHeight;
 	hiddenContext.drawImage(vid, 0,0); // the video
 
-
 	info('drawing thumbnail');
 	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d'); // get its context
-	// canvas.width = vid.videoWidth; // set its size to the one of the video
-	// canvas.height = vid.videoHeight;
 
-	// let url = 'https://www.rd.com/wp-content/uploads/2020/01/GettyImages-1131335393-e1580493890249-2048x1367.jpg';
-	// let image = new Image();
-	// image.src = url;
-	// image.onload = () => {
-	// 	// ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
-	// 	drawImageProp(ctx, image, 0, 0, canvas.width, canvas.height);
-	// }
-
-	// drawImageProp(ctx, vid, 0, 0, canvas.width, canvas.height);
-
-	let scale = Math.min(canvas.width / vid.videoWidth, canvas.height / vid.videoHeight);
-    let x = (canvas.width / 2) - (vid.videoWidth / 2) * scale;
-	let y = (canvas.height / 2) - (vid.videoHeight / 2) * scale;
-
+	let scale = Math.min(canvas.clientWidth / vid.videoWidth, canvas.clientHeight / vid.videoHeight);
 	let newWidth = vid.videoWidth * scale;
 	let newHeight = vid.videoHeight * scale;
+    let x = (canvas.clientWidth / 2) - newWidth / 2;
+	let y = (canvas.clientHeight / 2) - newHeight / 2;
 
     ctx.drawImage(vid, x, y, newWidth, newHeight);
-
-	// ctx.drawImage(vid, 0, 0);
-
-	// info(`video size: ${vid.videoWidth}, ${vid.videoHeight}`);
-	// info(`context size: ${ctx.canvas.clientWidth}, ${ctx.canvas.clientHeight}`);
-	// info(`canvas size: ${canvas.clientWidth}, ${canvas.clientHeight}`);
 }
 
-async function retake() {
+function loadTestImage() {
+	hiddenCanvas = document.createElement('canvas'); // create a canvas
+	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
+
+	let canvas = document.getElementById('thumbnail');
+	let ctx = canvas.getContext('2d'); // get its context
+
+	let url = './airplane.jpg';
+	let image = new Image();
+	image.src = url;
+	
+	image.onload = () => {
+		info('capturing full image');
+		hiddenCanvas.width = image.width; // set its size to the one of the video
+		hiddenCanvas.height = image.width;
+		hiddenContext.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.clientWidth, canvas.clientHeight);
+
+		info('drawing thumbnail');
+		let scale = Math.min(canvas.clientWidth / image.width, canvas.clientHeight / image.height);
+		let newWidth = image.width * scale;
+		let newHeight = image.height * scale;
+
+		let x = (canvas.clientWidth / 2) - newWidth / 2;
+		let y = (canvas.clientHeight / 2) - newHeight / 2;
+	
+		// ctx.drawImage(image, x, y, newWidth, newHeight);
+		ctx.scale(.1, .1);
+		ctx.drawImage(image, 0, 0);
+	}
+}
+
+function retake() {
 	setMode(MODE_VIDEO);
 
 	let canvas = document.getElementById('canvas');
@@ -106,10 +124,10 @@ function setMode(newMode) {
 	saveButton.disabled = mode === MODE_VIDEO;
 
 	let video = document.getElementById('vid');
-	let canvas = document.getElementById('thumbnail');
+	let canvas = document.getElementById('canvasContainer');
 
-	video.style.display = mode === MODE_VIDEO ? 'initial' : 'none';
-	canvas.style.display = mode === MODE_CANVAS ? 'initial' : 'none';
+	video.style.display = mode === MODE_VIDEO ? 'block' : 'none';
+	canvas.style.display = mode === MODE_CANVAS ? 'block' : 'none';
 }
 
 function upload(input) {
@@ -158,6 +176,7 @@ async function init() {
 		await vid.play(); // returns a Promise
 	} catch(error) {
 		info(error);
+		videoSupported = false;
 	}
 }
 

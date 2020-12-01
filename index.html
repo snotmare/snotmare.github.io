@@ -5,12 +5,17 @@
 	<meta http-equiv="Expires" content="0" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="./code.js"></script>
+	<link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
 	<h3>Download photo</h3>
-	<video id="vid" width="200" height="300" playsinline style="border: 1px solid black"></video>
-	<canvas id="thumbnail" width="200" height="300" style="border: 1px solid black"></canvas>
+	<video id="vid" playsinline></video>
+
+	<div id="canvasContainer" class="canvasContainer">
+		<canvas id="thumbnail" style=" z-index: 0;"></canvas>
+		<!-- <canvas id="annotate" style="z-index: 1;"></canvas> -->
+	</div>
 	<br/>
 	<br/>
 	<div>
