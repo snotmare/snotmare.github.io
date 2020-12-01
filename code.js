@@ -7,8 +7,6 @@ const MODE_VIDEO = 'VIDEO';
 const MODE_CANVAS = 'CANVAS';
 let mode = MODE_VIDEO;
 
-let hiddenCanvas;
-
 async function save(){
 	try {
 		info('saving');
@@ -36,16 +34,8 @@ async function capture() {
 	setMode(MODE_CANVAS);
 	let vid = document.querySelector('video');
 	
-	info('capturing full image');
-	hiddenCanvas = document.createElement('canvas'); // create a canvas
-	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
-	hiddenCanvas.width = vid.videoWidth; // set its size to the one of the video
-	hiddenCanvas.height = vid.videoHeight;
-	hiddenContext.drawImage(vid, 0,0); // the video
-
-
-	info('drawing thumbnail');
-	let canvas = document.getElementById('thumbnail');
+	info('capturing image');
+	let canvas = document.getElementById('canvas');
 	let ctx = canvas.getContext('2d'); // get its context
 	// canvas.width = vid.videoWidth; // set its size to the one of the video
 	// canvas.height = vid.videoHeight;
@@ -60,14 +50,14 @@ async function capture() {
 
 	// drawImageProp(ctx, vid, 0, 0, canvas.width, canvas.height);
 
-	let scale = Math.min(canvas.width / vid.videoWidth, canvas.height / vid.videoHeight);
-    let x = (canvas.width / 2) - (vid.videoWidth / 2) * scale;
-	let y = (canvas.height / 2) - (vid.videoHeight / 2) * scale;
+	// let scale = Math.min(canvas.width / vid.videoWidth, canvas.height / vid.videoHeight);
+    // let x = (canvas.width / 2) - (vid.videoWidth / 2) * scale;
+	// let y = (canvas.height / 2) - (vid.videoHeight / 2) * scale;
 
-	let newWidth = vid.videoWidth * scale;
-	let newHeight = vid.videoHeight * scale;
+	// let newWidth = vid.videoWidth * scale;
+	// let newHeight = vid.videoHeight * scale;
 
-    ctx.drawImage(vid, x, y, newWidth, newHeight);
+    ctx.drawImage(vid, 0, 0);
 
 	// ctx.drawImage(vid, 0, 0);
 
@@ -101,7 +91,7 @@ function setMode(newMode) {
 	saveButton.disabled = mode === MODE_VIDEO;
 
 	let video = document.getElementById('vid');
-	let canvas = document.getElementById('thumbnail');
+	let canvas = document.getElementById('canvas');
 
 	video.style.display = mode === MODE_VIDEO ? 'initial' : 'none';
 	canvas.style.display = mode === MODE_CANVAS ? 'initial' : 'none';
@@ -136,8 +126,7 @@ async function init() {
 	setMode(MODE_VIDEO);
 	
 	try {
-		info('getting media');
-		
+		info('initing video');
 		let options = {
 			audio: false,
 			video: {
@@ -149,7 +138,6 @@ async function init() {
 
 		let stream = await navigator.mediaDevices.getUserMedia(options); // request cam
 		
-		info('initing video');
 		let vid = document.querySelector('video');
 		vid.srcObject = stream; // don't use createObjectURL(MediaStream)
 		await vid.play(); // returns a Promise
