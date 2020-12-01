@@ -42,7 +42,8 @@ async function save(){
 async function capture() {
 	setMode(MODE_CANVAS);
 	let vid = document.querySelector('video');
-
+	
+	info('capturing full image');
 	hiddenCanvas = document.createElement('canvas'); // create a canvas
 	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
 	hiddenCanvas.width = vid.videoWidth; // set its size to the one of the video
@@ -50,7 +51,8 @@ async function capture() {
 	hiddenContext.drawImage(vid, 0,0); // the video
 
 
-	let canvas = document.getElementById('canvas');
+	info('drawing thumbnail');
+	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d'); // get its context
 	// canvas.width = vid.videoWidth; // set its size to the one of the video
 	// canvas.height = vid.videoHeight;
@@ -72,9 +74,6 @@ async function capture() {
 	let newWidth = vid.videoWidth * scale;
 	let newHeight = vid.videoHeight * scale;
 
-	info(`original size: ${vid.videoWidth}, ${vid.videoHeight}`);
-	info(`scaling to: ${newWidth}, ${newHeight}`);
-	
     ctx.drawImage(vid, x, y, newWidth, newHeight);
 
 	// ctx.drawImage(vid, 0, 0);
@@ -109,7 +108,7 @@ function setMode(newMode) {
 	saveButton.disabled = mode === MODE_VIDEO;
 
 	let video = document.getElementById('vid');
-	let canvas = document.getElementById('canvas');
+	let canvas = document.getElementById('thumbnail');
 
 	video.style.display = mode === MODE_VIDEO ? 'initial' : 'none';
 	canvas.style.display = mode === MODE_CANVAS ? 'initial' : 'none';
