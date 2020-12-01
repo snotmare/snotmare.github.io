@@ -67,7 +67,7 @@ function capture() {
 	// info(`new: ${newWidth}, ${newHeight}`);
 	// info(`location: ${x}, ${y}`);
 
-	ctx.scale(scale);
+	ctx.scale(scale, scale);
     ctx.drawImage(vid, x, y);
 }
 
