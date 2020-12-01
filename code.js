@@ -68,19 +68,10 @@ async function capture() {
 	
     // ctx.drawImage(vid, x, y, newWidth, newHeight);
 
+	ctx.drawImage(vid, 0, 0);
 
-	let scale = Math.min(canvas.width / vid.width, canvas.height / vid.height);
-    let x = (canvas.width / 2) - (vid.width / 2) * scale;
-	let y = (canvas.height / 2) - (vid.height / 2) * scale;
-
-	let newWidth = vid.width * scale;
-	let newHeight = vid.height * scale;
-
-	info(`coord: ${x}, ${y}`);
-	info(`original size: ${vid.width}, ${vid.height}`);
-	info(`scaling to: ${newWidth}, ${newHeight}`);
-	
-    ctx.drawImage(vid, x, y, newWidth, newHeight);
+	info(`context size: ${ctx.canvas.clientWidth}, ${ctx.canvas.clientWidth}`);
+	info(`canvas size: ${canvas.clientWidth}, ${canvas.clientWidth}`);
 }
 
 async function retake() {
