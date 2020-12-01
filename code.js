@@ -54,11 +54,18 @@ function capture() {
 	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d'); // get its context
 
+	info(`canvas: ${canvas.clientWidth}, ${canvas.clientHeight}`);
+	info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
+
 	let scale = Math.min(canvas.clientWidth / vid.videoWidth, canvas.clientHeight / vid.videoHeight);
 	let newWidth = vid.videoWidth * scale;
 	let newHeight = vid.videoHeight * scale;
     let x = (canvas.clientWidth / 2) - newWidth / 2;
 	let y = (canvas.clientHeight / 2) - newHeight / 2;
+
+	info(`scale: ${scale}`);
+	info(`new: ${newWidth}, ${newHeight}`);
+	info(`location: ${x}, ${y}`);
 
     ctx.drawImage(vid, x, y, newWidth, newHeight);
 }
