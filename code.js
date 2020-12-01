@@ -17,10 +17,10 @@ async function save(){
 		// canvas.height = vid.videoHeight;
 		// ctx.drawImage(vid, 0,0); // the video
 
-		// let canvas = document.getElementById('canvas');
+		let canvas = document.getElementById('canvas');
 		
 		let blob = await new Promise((res, rej)=>{
-			hiddenCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+			canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
 		});
 
 		info('downloading');
@@ -72,8 +72,8 @@ async function retake() {
 
 	let canvas = document.getElementById('canvas');
 	let ctx = canvas.getContext('2d');
-	ctx.scale(1, 1);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.restore();
 }
 
 function download(blob){
