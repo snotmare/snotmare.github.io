@@ -54,20 +54,20 @@ function capture() {
 	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d'); // get its context
 
-	info(`canvas: ${canvas.clientWidth}, ${canvas.clientHeight}`);
+	info(`canvas: ${canvas.width}, ${canvas.height}`);
 	info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
 
-	let scale = Math.min(canvas.clientWidth / vid.videoWidth, canvas.clientHeight / vid.videoHeight);
+	let scale = Math.min(canvas.width / vid.videoWidth, canvas.height / vid.videoHeight);
 	let newWidth = vid.videoWidth * scale;
 	let newHeight = vid.videoHeight * scale;
-    let x = (canvas.clientWidth / 2) - newWidth / 2;
-	let y = (canvas.clientHeight / 2) - newHeight / 2;
+    let x = (canvas.width / 2) - newWidth / 2;
+	let y = (canvas.height / 2) - newHeight / 2;
 
 	// info(`scale: ${scale}`);
 	// info(`new: ${newWidth}, ${newHeight}`);
 	// info(`location: ${x}, ${y}`);
 
-	ctx.scale(scale, scale);
+	// ctx.scale(scale, scale);
     ctx.drawImage(vid, x, y);
 }
 
@@ -86,26 +86,26 @@ function loadTestImage() {
 		info('capturing full image');
 		hiddenCanvas.width = image.width; // set its size to the one of the video
 		hiddenCanvas.height = image.width;
-		hiddenContext.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.clientWidth, canvas.clientHeight);
+		hiddenContext.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
 
 		info('drawing thumbnail');
-		let scale = Math.min(canvas.clientWidth / image.width, canvas.clientHeight / image.height);
+		let scale = Math.min(canvas.width / image.width, canvas.height / image.height);
 		let newWidth = image.width * scale;
 		let newHeight = image.height * scale;
 
-		let x = (canvas.clientWidth / 2) - newWidth / 2;
-		let y = (canvas.clientHeight / 2) - newHeight / 2;
+		let x = (canvas.width / 2) - newWidth / 2;
+		let y = (canvas.height / 2) - newHeight / 2;
 	
-		// ctx.drawImage(image, x, y, newWidth, newHeight);
-		ctx.scale(.1, .1);
-		ctx.drawImage(image, 0, 0);
+		ctx.drawImage(image, x, y, newWidth, newHeight);
+		// ctx.scale(.1, .1);
+		// ctx.drawImage(image, 0, 0);
 	}
 }
 
 function retake() {
 	setMode(MODE_VIDEO);
 
-	let canvas = document.getElementById('canvas');
+	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d');
 	// ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.restore();
