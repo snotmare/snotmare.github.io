@@ -63,11 +63,12 @@ function capture() {
     let x = (canvas.clientWidth / 2) - newWidth / 2;
 	let y = (canvas.clientHeight / 2) - newHeight / 2;
 
-	info(`scale: ${scale}`);
-	info(`new: ${newWidth}, ${newHeight}`);
-	info(`location: ${x}, ${y}`);
+	// info(`scale: ${scale}`);
+	// info(`new: ${newWidth}, ${newHeight}`);
+	// info(`location: ${x}, ${y}`);
 
-    ctx.drawImage(vid, x, y, newWidth, newHeight);
+	ctx.scale(scale);
+    ctx.drawImage(vid, x, y);
 }
 
 function loadTestImage() {
