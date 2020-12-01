@@ -69,6 +69,11 @@ async function capture() {
 
 async function retake() {
 	setMode(MODE_VIDEO);
+
+	let canvas = document.getElementById('canvas');
+	let ctx = canvas.getContext('2d');
+	ctx.scale(1, 1);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function download(blob){
