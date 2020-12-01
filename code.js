@@ -1,4 +1,12 @@
-// https://stackoverflow.com/questions/46882550/how-to-save-a-jpg-image-video-captured-with-webcam-in-the-local-hard-drive-with
+/**
+ * Various links
+ * https://stackoverflow.com/questions/46882550/how-to-save-a-jpg-image-video-captured-with-webcam-in-the-local-hard-drive-with
+ */
+
+const MODE_VIDEO = 'VIDEO';
+const MODE_CANVAS = 'CANVAS';
+let mode = MODE_VIDEO;
+
 let options = {
 	audio: false,
 	video: {
@@ -6,30 +14,17 @@ let options = {
 	}
 };
 
-async function initMedia() {
-	try {
-		info('getting media');
-		let stream = await navigator.mediaDevices.getUserMedia(options); // request cam
-		
-		info('initing canvas');
-		let vid = document.querySelector('video');
-		vid.srcObject = stream; // don't use createObjectURL(MediaStream)
-		await vid.play(); // returns a Promise
-	} catch(error) {
-		info(error);
-	}
-
-}
-
 async function save(){
 	try {
 		info('saving');
-		const canvas = document.createElement('canvas'); // create a canvas
-		const ctx = canvas.getContext('2d'); // get its context
-		let vid = document.querySelector('video');
-		canvas.width = vid.videoWidth; // set its size to the one of the video
-		canvas.height = vid.videoHeight;
-		ctx.drawImage(vid, 0,0); // the video
+		// const canvas = document.createElement('canvas'); // create a canvas
+		// const ctx = canvas.getContext('2d'); // get its context
+		// let vid = document.querySelector('video');
+		// canvas.width = vid.videoWidth; // set its size to the one of the video
+		// canvas.height = vid.videoHeight;
+		// ctx.drawImage(vid, 0,0); // the video
+
+		let canvas = document.getElementById('canvas');
 		
 		let blob = await new Promise((res, rej)=>{
 			canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
@@ -42,6 +37,21 @@ async function save(){
 	}
 }
 
+async function capture() {
+	setMode(MODE_CANVAS);
+
+	let canvas = document.getElementById('canvas');
+	let ctx = canvas.getContext('2d'); // get its context
+	let vid = document.querySelector('video');
+	canvas.width = vid.videoWidth; // set its size to the one of the video
+	canvas.height = vid.videoHeight;
+	ctx.drawImage(vid, 0,0); // the video
+}
+
+async function retake() {
+	setMode(MODE_VIDEO);
+}
+
 function download(blob){
 	// uses the <a download> to download a Blob
 	let a = document.createElement('a'); 
@@ -51,8 +61,22 @@ function download(blob){
 	a.click();
 }
 
-function info(value) {
-	document.getElementById('output').innerHTML += `${value}<br/>`;
+function setMode(newMode) {
+	mode = newMode;
+
+	let captureButton = document.getElementById('captureButton');
+	let retakeButton = document.getElementById('retakeButton');
+	let saveButton = document.getElementById('saveButton');
+
+	captureButton.disabled = mode === MODE_CANVAS;
+	retakeButton.disabled = mode === MODE_VIDEO;
+	saveButton.disabled = mode === MODE_VIDEO;
+
+	let video = document.getElementById('vid');
+	let canvas = document.getElementById('canvas');
+
+	video.style.display = mode === MODE_VIDEO ? 'initial' : 'none';
+	canvas.style.display = mode === MODE_CANVAS ? 'initial' : 'none';
 }
 
 function upload(input) {
@@ -76,7 +100,26 @@ function upload(input) {
 	}
 }
 
-//not allowed error request is not allowed by the user agent or the platform of the current context, possibly because the user denied permission
+function info(value) {
+	document.getElementById('output').innerHTML += `${value}<br/>`;
+}
+
+async function init() {
+	setMode(MODE_VIDEO);
+	
+	try {
+		info('getting media');
+		let stream = await navigator.mediaDevices.getUserMedia(options); // request cam
+		
+		info('initing canvas');
+		let vid = document.querySelector('video');
+		vid.srcObject = stream; // don't use createObjectURL(MediaStream)
+		await vid.play(); // returns a Promise
+	} catch(error) {
+		info(error);
+	}
+}
+
 setTimeout(() => {
-	initMedia();
+	init();
 }, 10);
