@@ -7,6 +7,8 @@ const MODE_VIDEO = 'VIDEO';
 const MODE_CANVAS = 'CANVAS';
 let mode = MODE_VIDEO;
 
+let hiddenCanvas;
+
 let options = {
 	audio: false,
 	video: {
@@ -24,10 +26,10 @@ async function save(){
 		// canvas.height = vid.videoHeight;
 		// ctx.drawImage(vid, 0,0); // the video
 
-		let canvas = document.getElementById('canvas');
+		// let canvas = document.getElementById('canvas');
 		
 		let blob = await new Promise((res, rej)=>{
-			canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+			hiddenCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
 		});
 
 		info('downloading');
@@ -39,10 +41,17 @@ async function save(){
 
 async function capture() {
 	setMode(MODE_CANVAS);
+	let vid = document.querySelector('video');
+
+	hiddenCanvas = document.createElement('canvas'); // create a canvas
+	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
+	hiddenCanvas.width = vid.videoWidth; // set its size to the one of the video
+	hiddenCanvas.height = vid.videoHeight;
+	hiddenContext.drawImage(vid, 0,0); // the video
+
 
 	let canvas = document.getElementById('canvas');
 	let ctx = canvas.getContext('2d'); // get its context
-	let vid = document.querySelector('video');
 	// canvas.width = vid.videoWidth; // set its size to the one of the video
 	// canvas.height = vid.videoHeight;
 
