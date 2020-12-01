@@ -56,23 +56,23 @@ async function capture() {
 
 	// drawImageProp(ctx, vid, 0, 0, canvas.width, canvas.height);
 
-	// let scale = Math.min(canvas.width / vid.width, canvas.height / vid.height);
-    // let x = (canvas.width / 2) - (vid.width / 2) * scale;
-	// let y = (canvas.height / 2) - (vid.height / 2) * scale;
+	let scale = Math.min(canvas.width / vid.videoWidth, canvas.height / vid.videoHeight);
+    let x = (canvas.width / 2) - (vid.videoWidth / 2) * scale;
+	let y = (canvas.height / 2) - (vid.videoHeight / 2) * scale;
 
-	// let newWidth = vid.width * scale;
-	// let newHeight = vid.height * scale;
+	let newWidth = vid.videoWidth * scale;
+	let newHeight = vid.videoHeight * scale;
 
-	// info(`original size: ${vid.width}, ${vid.height}`);
-	// info(`scaling to: ${newWidth}, ${newHeight}`);
+	info(`original size: ${vid.videoWidth}, ${vid.videoHeight}`);
+	info(`scaling to: ${newWidth}, ${newHeight}`);
 	
-    // ctx.drawImage(vid, x, y, newWidth, newHeight);
+    ctx.drawImage(vid, x, y, newWidth, newHeight);
 
-	ctx.drawImage(vid, 0, 0);
+	// ctx.drawImage(vid, 0, 0);
 
-	info(`video size: ${vid.videoWidth}, ${vid.videoHeight}`);
-	info(`context size: ${ctx.canvas.clientWidth}, ${ctx.canvas.clientHeight}`);
-	info(`canvas size: ${canvas.clientWidth}, ${canvas.clientHeight}`);
+	// info(`video size: ${vid.videoWidth}, ${vid.videoHeight}`);
+	// info(`context size: ${ctx.canvas.clientWidth}, ${ctx.canvas.clientHeight}`);
+	// info(`canvas size: ${canvas.clientWidth}, ${canvas.clientHeight}`);
 }
 
 async function retake() {
