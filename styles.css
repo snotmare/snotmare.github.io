@@ -18,3 +18,7 @@ video {
 	top: 0;
 	width: 100%;
 }
+
+.hiddenCanvasContainer {
+	overflow: auto;
+}
