@@ -85,7 +85,7 @@ function loadVideoImage() {
 
 	info(`scale: ${scale}`);
 	info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
-	info(`location: ${x}, ${y}`);
+	info(`location: ${thumbnailX}, ${thumbnailY}`);
     ctx.drawImage(vid, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
 }
 
