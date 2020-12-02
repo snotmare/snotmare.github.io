@@ -4,6 +4,7 @@
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="./fabric.min.js"></script>
 	<script src="./code.js"></script>
 	<link rel="stylesheet" href="./styles.css">
 </head>
@@ -14,8 +15,15 @@
 
 	<div id="canvasContainer" class="canvasContainer">
 		<canvas id="thumbnail" width="300" height="300" style=" z-index: 0;"></canvas>
-		<!-- <canvas id="annotate" width="300" height="300" style="z-index: 1;"></canvas> -->
+		<canvas id="annotate" width="300" height="300" style="z-index: 1;"></canvas>
 	</div>
+
+	<br/>
+	<div id="annotationButtons">
+		<button onclick="clearCanvas()">Clear</button>
+		<button onclick="copyCanvas()">Copy</button>
+	</div>
+
 	<br/>
 	<br/>
 	<div>
@@ -36,5 +44,10 @@
 	<br/>
 	<h3>Debug output</h3>
 	<div id="output"></div>
+
+	<br/>
+	<br/>
+	<h3>Image actually being saved</h3>
+	<canvas id="hiddenCanvas"></canvas>
 </body>
 </html>

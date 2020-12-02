@@ -9,42 +9,62 @@ let mode = MODE_VIDEO;
 let videoSupported = true;
 
 let hiddenCanvas;
+let fabricCanvas;
+let thumbnailX;
+let thumbnailY;
+let thumbnailWidth;
+let thumbnailHeight;
 
-async function save(){
-	try {
-		info('saving');
-		// const canvas = document.createElement('canvas'); // create a canvas
-		// const ctx = canvas.getContext('2d'); // get its context
-		// let vid = document.querySelector('video');
-		// canvas.width = vid.videoWidth; // set its size to the one of the video
-		// canvas.height = vid.videoHeight;
-		// ctx.drawImage(vid, 0,0); // the video
-
-		// let canvas = document.getElementById('canvas');
-		
-		let blob = await new Promise((res, rej)=>{
-			hiddenCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
-		});
-
-		info('downloading');
-		download(blob);
-	} catch(error) {
-		info(error);
-	}
-}
+//Capture image
 
 function capture() {
 	setMode(MODE_CANVAS);
 
-	if(!videoSupported) {
+	if(videoSupported) {
+		loadVideoImage();
+	} else {
 		loadTestImage();
-		return;
 	}
 
+	initAnnotations();
+}
+
+function loadTestImage() {
+	// hiddenCanvas = document.createElement('canvas'); // create a canvas
+	hiddenCanvas = document.getElementById('hiddenCanvas');
+	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
+
+	let canvas = document.getElementById('thumbnail');
+	let ctx = canvas.getContext('2d'); // get its context
+
+	let url = './airplane.jpg';
+	let image = new Image();
+	image.src = url;
+	
+	image.onload = () => {
+		info('capturing full image');
+		hiddenCanvas.width = image.width;
+		hiddenCanvas.height = image.height;
+		hiddenContext.drawImage(image, 0, 0, image.width, image.height);
+
+		info('drawing thumbnail');
+		let scale = Math.min(canvas.width / image.width, canvas.height / image.height);
+		thumbnailWidth = image.width * scale;
+		thumbnailHeight = image.height * scale;
+
+		thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
+		thumbnailY = (canvas.height / 2) - thumbnailHeight / 2;
+	
+		ctx.drawImage(image, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
+	}
+}
+
+function loadVideoImage() {
 	let vid = document.querySelector('video');
 	
 	info('capturing full image');
-	hiddenCanvas = document.createElement('canvas'); // create a canvas
+	// hiddenCanvas = document.createElement('canvas'); // create a canvas
+	hiddenCanvas = document.getElementById('hiddenCanvas');
 	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
 	hiddenCanvas.width = vid.videoWidth; // set its size to the one of the video
 	hiddenCanvas.height = vid.videoHeight;
@@ -58,54 +78,50 @@ function capture() {
 	info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
 
 	let scale = Math.min(canvas.width / vid.videoWidth, canvas.height / vid.videoHeight);
-	let newWidth = vid.videoWidth * scale;
-	let newHeight = vid.videoHeight * scale;
-    let x = (canvas.width / 2) - newWidth / 2;
-	let y = (canvas.height / 2) - newHeight / 2;
+	thumbnailWidth = vid.videoWidth * scale;
+	thumbnailHeight = vid.videoHeight * scale;
+    thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
+	thumbnailY = (canvas.height / 2) - thumbnailHeight / 2;
 
 	info(`scale: ${scale}`);
-	info(`new: ${newWidth}, ${newHeight}`);
+	info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
 	info(`location: ${x}, ${y}`);
-    ctx.drawImage(vid, x, y, newWidth, newHeight);
+    ctx.drawImage(vid, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
 }
 
-function loadTestImage() {
-	hiddenCanvas = document.createElement('canvas'); // create a canvas
-	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
+//Annotations
 
-	let canvas = document.getElementById('thumbnail');
-	let ctx = canvas.getContext('2d'); // get its context
-
-	let url = './airplane.jpg';
-	let image = new Image();
-	image.src = url;
+function initAnnotations() {
+	if(fabricCanvas === undefined) {
+		let canvas = document.getElementById('annotate');
 	
-	image.onload = () => {
-		info('capturing full image');
-		hiddenCanvas.width = image.width; // set its size to the one of the video
-		hiddenCanvas.height = image.width;
-		hiddenContext.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
-
-		info('drawing thumbnail');
-		let scale = Math.min(canvas.width / image.width, canvas.height / image.height);
-		let newWidth = image.width * scale;
-		let newHeight = image.height * scale;
-
-		let x = (canvas.width / 2) - newWidth / 2;
-		let y = (canvas.height / 2) - newHeight / 2;
-	
-		ctx.drawImage(image, x, y, newWidth, newHeight);
-		// ctx.scale(.1, .1);
-		// ctx.drawImage(image, 0, 0);
+		fabricCanvas = new fabric.Canvas(canvas, {
+			isDrawingMode: true
+		});
 	}
+
+	fabricCanvas.clear();
 }
+
+function clearCanvas() {
+	fabricCanvas.clear();
+}
+
+function copyCanvas() {
+	let annotateCanvas = document.getElementById('annotate');
+
+	let ctx = hiddenCanvas.getContext('2d');
+	ctx.drawImage(annotateCanvas, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+}
+
+//Misc buttons
 
 function retake() {
 	setMode(MODE_VIDEO);
 
 	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d');
-	// ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.restore();
 }
 
@@ -130,11 +146,38 @@ function setMode(newMode) {
 	saveButton.disabled = mode === MODE_VIDEO;
 
 	let video = document.getElementById('vid');
-	let canvas = document.getElementById('canvasContainer');
+	let canvasContainer = document.getElementById('canvasContainer');
+	let annotationButtons = document.getElementById('annotationButtons');
 
 	video.style.display = mode === MODE_VIDEO ? 'block' : 'none';
-	canvas.style.display = mode === MODE_CANVAS ? 'block' : 'none';
+	canvasContainer.style.display = mode === MODE_CANVAS ? 'block' : 'none';
+	annotationButtons.style.display = mode === MODE_CANVAS ? 'block' : 'none';
 }
+
+async function save(){
+	try {
+		info('saving');
+		// const canvas = document.createElement('canvas'); // create a canvas
+		// const ctx = canvas.getContext('2d'); // get its context
+		// let vid = document.querySelector('video');
+		// canvas.width = vid.videoWidth; // set its size to the one of the video
+		// canvas.height = vid.videoHeight;
+		// ctx.drawImage(vid, 0,0); // the video
+
+		// let canvas = document.getElementById('canvas');
+		
+		let blob = await new Promise((res, rej)=>{
+			hiddenCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+		});
+
+		info('downloading');
+		download(blob);
+	} catch(error) {
+		info(error);
+	}
+}
+
+//Upload
 
 function upload(input) {
 	if (input.files) {
