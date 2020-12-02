@@ -108,10 +108,17 @@ function clearCanvas() {
 }
 
 function copyCanvas() {
-	let annotateCanvas = document.getElementById('annotate');
-
-	let ctx = hiddenCanvas.getContext('2d');
-	ctx.drawImage(annotateCanvas, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+	try {
+		let annotateCanvas = document.getElementById('annotate');
+	
+		let ctx = hiddenCanvas.getContext('2d');
+		info(`thumbnail size: ${thumbnailWidth}, ${thumbnailHeight}`);
+		info(`thumbnail location: ${thumbnailX}, ${thumbnailY}`);
+		info(`hidden size: ${hiddenCanvas.width}, ${hiddenCanvas.height}`);
+		ctx.drawImage(annotateCanvas, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+	} catch(error) {
+		info(error);
+	}
 }
 
 //Misc buttons
