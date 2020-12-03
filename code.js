@@ -19,6 +19,7 @@ let thumbnailHeight;
 
 function capture() {
 	setMode(MODE_CANVAS);
+	initAnnotations();
 
 	if(videoSupported) {
 		loadVideoImage();
@@ -26,7 +27,6 @@ function capture() {
 		loadTestImage();
 	}
 
-	initAnnotations();
 }
 
 function loadTestImage() {
