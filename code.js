@@ -57,33 +57,18 @@ function loadTestImage() {
 		thumbnailY = (canvas.clientHeight / 2) - thumbnailHeight / 2;
 	
 		// ctx.drawImage(image, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
-
-		let canvasContainer = document.getElementById('canvasContainer');
-
 		canvas.width = image.width;
 		canvas.height = image.height;
-		
-		
 
+		let canvasContainer = document.getElementById('canvasContainer');
 		canvasContainer.style.width = `${thumbnailWidth}px`;
 		canvasContainer.style.height = `${thumbnailHeight}px`;
-
-		// fabricCanvas.upperCanvasEl.width = image.width;
-		// fabricCanvas.upperCanvasEl.height = image.height;
 
 		fabricCanvas.setDimensions({width: image.width, height: image.height});
 		fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
 
 		// canvas.style.width = thumbnailWidth;
 		// canvas.style.height = thumbnailHeight;
-		// fabricCanvas.upperCanvasEl.style.width = thumbnailWidth;
-		// fabricCanvas.upperCanvasEl.style.height = thumbnailHeight;
-
-		// fabricCanvas.wrapperEl.style.width = thumbnailWidth;
-		// fabricCanvas.wrapperEl.style.height = thumbnailHeight;
-
-		// fabricCanvas.Image(image);
-		// fabricCanvas.setBackgroundImage(image);
 		ctx.drawImage(image, 0, 0, image.width, image.height);
 	}
 }
@@ -103,6 +88,9 @@ function loadVideoImage() {
 	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d'); // get its context
 
+	canvas.width = vid.videoWidth;
+	canvas.height = vid.videoHeight;
+
 	info(`canvas: ${canvas.width}, ${canvas.height}`);
 	info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
 
@@ -115,7 +103,16 @@ function loadVideoImage() {
 	info(`scale: ${scale}`);
 	info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
 	info(`location: ${thumbnailX}, ${thumbnailY}`);
-    ctx.drawImage(vid, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
+	// ctx.drawImage(vid, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
+	
+	let canvasContainer = document.getElementById('canvasContainer');
+	canvasContainer.style.width = `${thumbnailWidth}px`;
+	canvasContainer.style.height = `${thumbnailHeight}px`;
+
+	fabricCanvas.setDimensions({width: vid.videoWidth, height: vid.videoHeight});
+	fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
+
+	ctx.drawImage(image, 0, 0, vid.videoWidth, vid.videoHeight);
 }
 
 //Annotations
