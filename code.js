@@ -67,6 +67,7 @@ function loadTestImage() {
 
 		fabricCanvas.setDimensions({width: image.width, height: image.height});
 		fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
+		fabricCanvas.upperCanvasEl.style.zIndex = 2;
 
 		ctx.drawImage(image, 0, 0, image.width, image.height);
 	}
@@ -101,6 +102,7 @@ function loadVideoImage() {
 
 	fabricCanvas.setDimensions({width: vid.videoWidth, height: vid.videoHeight});
 	fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
+	fabricCanvas.upperCanvasEl.style.zIndex = 2;
 
 	ctx.drawImage(vid, 0, 0, vid.videoWidth, vid.videoHeight);
 }
