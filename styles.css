@@ -5,9 +5,10 @@ video {
 }
 
 .canvasContainer {
-	height: 300px;
+	display: inline-block;
+	/* height: 300px; */
 	position: relative;
-	width: 300px;
+	/* width: 300px; */
 }
 
 .canvasContainer canvas {

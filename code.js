@@ -26,7 +26,7 @@ function capture() {
 		loadTestImage();
 	}
 
-	initAnnotations();
+	// initAnnotations();
 }
 
 function loadTestImage() {
@@ -48,14 +48,28 @@ function loadTestImage() {
 		hiddenContext.drawImage(image, 0, 0, image.width, image.height);
 
 		info('drawing thumbnail');
-		let scale = Math.min(canvas.width / image.width, canvas.height / image.height);
+		// let scale = Math.min(canvas.clientWidth / image.width, canvas.clientHeight / image.height);
+		let scale = Math.min(300 / image.width, 300 / image.height);
 		thumbnailWidth = image.width * scale;
 		thumbnailHeight = image.height * scale;
 
-		thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
-		thumbnailY = (canvas.height / 2) - thumbnailHeight / 2;
+		thumbnailX = (canvas.clientWidth / 2) - thumbnailWidth / 2;
+		thumbnailY = (canvas.clientHeight / 2) - thumbnailHeight / 2;
 	
-		ctx.drawImage(image, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
+		// ctx.drawImage(image, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
+
+		let canvasContainer = document.getElementById('canvasContainer');
+
+		canvas.width = image.width;
+		canvas.height = image.height;
+		ctx.drawImage(image, 0, 0, image.width, image.height);
+
+		canvasContainer.style.width = `${thumbnailWidth}px`;
+		canvasContainer.style.height = `${thumbnailHeight}px`;
+
+		// let annotateCanvas = document.getElementById('annotate');
+		// annotateCanvas.width = thumbnailWidth;
+		// annotateCanvas.height = thumbnailHeight;
 	}
 }
 
@@ -154,11 +168,11 @@ function setMode(newMode) {
 
 	let video = document.getElementById('vid');
 	let canvasContainer = document.getElementById('canvasContainer');
-	let annotationButtons = document.getElementById('annotationButtons');
+	// let annotationButtons = document.getElementById('annotationButtons');
 
 	video.style.display = mode === MODE_VIDEO ? 'block' : 'none';
-	canvasContainer.style.display = mode === MODE_CANVAS ? 'block' : 'none';
-	annotationButtons.style.display = mode === MODE_CANVAS ? 'block' : 'none';
+	canvasContainer.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
+	// annotationButtons.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
 }
 
 async function save(){
@@ -174,7 +188,9 @@ async function save(){
 		// let canvas = document.getElementById('canvas');
 		
 		let blob = await new Promise((res, rej)=>{
-			hiddenCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+			let canvas = document.getElementById('thumbnail');
+			canvas.toBlob(res, 'image/jpeg');
+			// hiddenCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
 		});
 
 		info('downloading');
