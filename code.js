@@ -151,11 +151,11 @@ function setMode(newMode) {
 
 	let video = document.getElementById('vid');
 	let canvasContainer = document.getElementById('canvasContainer');
-	// let annotationButtons = document.getElementById('annotationButtons');
+	let annotationButtons = document.getElementById('annotationButtons');
 
 	video.style.display = mode === MODE_VIDEO ? 'block' : 'none';
 	canvasContainer.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
-	// annotationButtons.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
+	annotationButtons.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
 }
 
 async function save(){
