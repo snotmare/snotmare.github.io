@@ -94,7 +94,7 @@ function loadVideoImage() {
 	info(`canvas: ${canvas.width}, ${canvas.height}`);
 	info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
 
-	let scale = Math.min(canvas.width / vid.videoWidth, canvas.height / vid.videoHeight);
+	let scale = Math.min(canvas.clientWidth / vid.videoWidth, canvas.clientHeight / vid.videoHeight);
 	thumbnailWidth = vid.videoWidth * scale;
 	thumbnailHeight = vid.videoHeight * scale;
     thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
@@ -112,7 +112,7 @@ function loadVideoImage() {
 	fabricCanvas.setDimensions({width: vid.videoWidth, height: vid.videoHeight});
 	fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
 
-	ctx.drawImage(image, 0, 0, vid.videoWidth, vid.videoHeight);
+	ctx.drawImage(vid, 0, 0, vid.videoWidth, vid.videoHeight);
 }
 
 //Annotations
