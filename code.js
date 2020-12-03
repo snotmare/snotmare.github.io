@@ -39,7 +39,7 @@ function loadTestImage() {
 	image.onload = () => {
 		info('drawing thumbnail');
 		// let scale = Math.min(canvas.clientWidth / image.width, canvas.clientHeight / image.height);
-		let scale = Math.min(300 / image.width, 300 / image.height);
+		let scale = Math.min(500 / image.width, 500 / image.height);
 		thumbnailWidth = image.width * scale;
 		thumbnailHeight = image.height * scale;
 
@@ -76,7 +76,7 @@ function loadVideoImage() {
 	// info(`canvas: ${canvas.width}, ${canvas.height}`);
 	// info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
 
-	let scale = Math.min(canvas.clientWidth / vid.videoWidth, canvas.clientHeight / vid.videoHeight);
+	let scale = Math.min(500 / vid.videoWidth, 500 / vid.videoHeight);
 	thumbnailWidth = vid.videoWidth * scale;
 	thumbnailHeight = vid.videoHeight * scale;
     thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
