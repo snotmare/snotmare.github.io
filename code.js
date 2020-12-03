@@ -8,7 +8,6 @@ const MODE_CANVAS = 'CANVAS';
 let mode = MODE_VIDEO;
 let videoSupported = true;
 
-let hiddenCanvas;
 let fabricCanvas;
 let thumbnailX;
 let thumbnailY;
@@ -30,10 +29,6 @@ function capture() {
 }
 
 function loadTestImage() {
-	// hiddenCanvas = document.createElement('canvas'); // create a canvas
-	hiddenCanvas = document.getElementById('hiddenCanvas');
-	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
-
 	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d'); // get its context
 
@@ -42,11 +37,6 @@ function loadTestImage() {
 	image.src = url;
 	
 	image.onload = () => {
-		info('capturing full image');
-		hiddenCanvas.width = image.width;
-		hiddenCanvas.height = image.height;
-		hiddenContext.drawImage(image, 0, 0, image.width, image.height);
-
 		info('drawing thumbnail');
 		// let scale = Math.min(canvas.clientWidth / image.width, canvas.clientHeight / image.height);
 		let scale = Math.min(300 / image.width, 300 / image.height);
@@ -76,14 +66,6 @@ function loadTestImage() {
 function loadVideoImage() {
 	let vid = document.querySelector('video');
 	
-	info('capturing full image');
-	// hiddenCanvas = document.createElement('canvas'); // create a canvas
-	hiddenCanvas = document.getElementById('hiddenCanvas');
-	let hiddenContext = hiddenCanvas.getContext('2d'); // get its context
-	hiddenCanvas.width = vid.videoWidth; // set its size to the one of the video
-	hiddenCanvas.height = vid.videoHeight;
-	hiddenContext.drawImage(vid, 0,0); // the video
-
 	info('drawing thumbnail');
 	let canvas = document.getElementById('thumbnail');
 	let ctx = canvas.getContext('2d'); // get its context
@@ -91,8 +73,8 @@ function loadVideoImage() {
 	canvas.width = vid.videoWidth;
 	canvas.height = vid.videoHeight;
 
-	info(`canvas: ${canvas.width}, ${canvas.height}`);
-	info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
+	// info(`canvas: ${canvas.width}, ${canvas.height}`);
+	// info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
 
 	let scale = Math.min(canvas.clientWidth / vid.videoWidth, canvas.clientHeight / vid.videoHeight);
 	thumbnailWidth = vid.videoWidth * scale;
@@ -100,9 +82,9 @@ function loadVideoImage() {
     thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
 	thumbnailY = (canvas.height / 2) - thumbnailHeight / 2;
 
-	info(`scale: ${scale}`);
-	info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
-	info(`location: ${thumbnailX}, ${thumbnailY}`);
+	// info(`scale: ${scale}`);
+	// info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
+	// info(`location: ${thumbnailX}, ${thumbnailY}`);
 	// ctx.drawImage(vid, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
 	
 	let canvasContainer = document.getElementById('canvasContainer');
@@ -134,21 +116,6 @@ function initAnnotations() {
 
 function clearCanvas() {
 	fabricCanvas.clear();
-}
-
-function copyCanvas() {
-	try {
-		let annotateCanvas = document.getElementById('annotate');
-	
-		let ctx = hiddenCanvas.getContext('2d');
-		info(`thumbnail size: ${thumbnailWidth}, ${thumbnailHeight}`);
-		info(`thumbnail location: ${thumbnailX}, ${thumbnailY}`);
-		info(`hidden size: ${hiddenCanvas.width}, ${hiddenCanvas.height}`);
-		// ctx.drawImage(annotateCanvas, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
-		ctx.drawImage(annotateCanvas, 0, 0);
-	} catch(error) {
-		info(error);
-	}
 }
 
 //Misc buttons
