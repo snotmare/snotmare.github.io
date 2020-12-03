@@ -74,54 +74,62 @@ function loadTestImage() {
 }
 
 function loadVideoImage() {
-	let vid = document.querySelector('video');
+	try {
+		let vid = document.querySelector('video');
+		
+		info('drawing thumbnail');
+		let canvas = document.getElementById('thumbnail');
+		let ctx = canvas.getContext('2d'); // get its context
 	
-	info('drawing thumbnail');
-	let canvas = document.getElementById('thumbnail');
-	let ctx = canvas.getContext('2d'); // get its context
-
-	canvas.width = vid.videoWidth;
-	canvas.height = vid.videoHeight;
-
-	// info(`canvas: ${canvas.width}, ${canvas.height}`);
-	// info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
-
-	let scale = Math.min(500 / vid.videoWidth, 500 / vid.videoHeight);
-	thumbnailWidth = vid.videoWidth * scale;
-	thumbnailHeight = vid.videoHeight * scale;
-    thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
-	thumbnailY = (canvas.height / 2) - thumbnailHeight / 2;
-
-	// info(`scale: ${scale}`);
-	// info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
-	// info(`location: ${thumbnailX}, ${thumbnailY}`);
+		canvas.width = vid.videoWidth;
+		canvas.height = vid.videoHeight;
 	
-	let canvasContainer = document.getElementById('canvasContainer');
-	canvasContainer.style.width = `${thumbnailWidth}px`;
-	canvasContainer.style.height = `${thumbnailHeight}px`;
-
-	fabricCanvas.setDimensions({width: vid.videoWidth, height: vid.videoHeight});
-	fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
-	fabricCanvas.upperCanvasEl.style.zIndex = 2;
-
-	ctx.drawImage(vid, 0, 0, vid.videoWidth, vid.videoHeight);
+		// info(`canvas: ${canvas.width}, ${canvas.height}`);
+		// info(`video: ${vid.videoWidth}, ${vid.videoHeight}`);
+	
+		let scale = Math.min(500 / vid.videoWidth, 500 / vid.videoHeight);
+		thumbnailWidth = vid.videoWidth * scale;
+		thumbnailHeight = vid.videoHeight * scale;
+		thumbnailX = (canvas.width / 2) - thumbnailWidth / 2;
+		thumbnailY = (canvas.height / 2) - thumbnailHeight / 2;
+	
+		// info(`scale: ${scale}`);
+		// info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
+		// info(`location: ${thumbnailX}, ${thumbnailY}`);
+		
+		let canvasContainer = document.getElementById('canvasContainer');
+		canvasContainer.style.width = `${thumbnailWidth}px`;
+		canvasContainer.style.height = `${thumbnailHeight}px`;
+	
+		fabricCanvas.setDimensions({width: vid.videoWidth, height: vid.videoHeight});
+		fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
+		fabricCanvas.upperCanvasEl.style.zIndex = 2;
+	
+		ctx.drawImage(vid, 0, 0, vid.videoWidth, vid.videoHeight);
+	} catch(error) {
+		info(error);
+	}
 }
 
 //Annotations
 
 function initAnnotations() {
-	if(fabricCanvas === undefined) {
-		let canvas = document.getElementById('annotate');
-		// let canvas = document.getElementById('thumbnail');
+	try {
+		if(fabricCanvas === undefined) {
+			let canvas = document.getElementById('annotate');
+			// let canvas = document.getElementById('thumbnail');
+		
+			fabricCanvas = new fabric.Canvas(canvas, {
+				isDrawingMode: true
+			});
 	
-		fabricCanvas = new fabric.Canvas(canvas, {
-			isDrawingMode: true
-		});
-
-		fabricCanvas.freeDrawingBrush.width = 10;
+			fabricCanvas.freeDrawingBrush.width = 10;
+		}
+	
+		fabricCanvas.clear();
+	} catch(error) {
+		info(error);
 	}
-
-	fabricCanvas.clear();
 }
 
 function clearCanvas() {
@@ -149,23 +157,27 @@ function download(blob){
 }
 
 function setMode(newMode) {
-	mode = newMode;
-
-	let captureButton = document.getElementById('captureButton');
-	let retakeButton = document.getElementById('retakeButton');
-	let saveButton = document.getElementById('saveButton');
-
-	captureButton.disabled = mode === MODE_CANVAS;
-	retakeButton.disabled = mode === MODE_VIDEO;
-	saveButton.disabled = mode === MODE_VIDEO;
-
-	let video = document.getElementById('vid');
-	let canvasContainer = document.getElementById('canvasContainer');
-	let annotationButtons = document.getElementById('annotationButtons');
-
-	video.style.display = mode === MODE_VIDEO ? 'block' : 'none';
-	canvasContainer.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
-	annotationButtons.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
+	try {
+		mode = newMode;
+	
+		let captureButton = document.getElementById('captureButton');
+		let retakeButton = document.getElementById('retakeButton');
+		let saveButton = document.getElementById('saveButton');
+	
+		captureButton.disabled = mode === MODE_CANVAS;
+		retakeButton.disabled = mode === MODE_VIDEO;
+		saveButton.disabled = mode === MODE_VIDEO;
+	
+		let video = document.getElementById('vid');
+		let canvasContainer = document.getElementById('canvasContainer');
+		let annotationButtons = document.getElementById('annotationButtons');
+	
+		video.style.display = mode === MODE_VIDEO ? 'block' : 'none';
+		canvasContainer.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
+		annotationButtons.style.display = mode === MODE_CANVAS ? 'inline-block' : 'none';
+	} catch(error) {
+		info(error);
+	}
 }
 
 async function save(){
