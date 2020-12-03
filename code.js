@@ -26,7 +26,7 @@ function capture() {
 		loadTestImage();
 	}
 
-	// initAnnotations();
+	initAnnotations();
 }
 
 function loadTestImage() {
@@ -62,14 +62,20 @@ function loadTestImage() {
 
 		canvas.width = image.width;
 		canvas.height = image.height;
+		canvas.style.width = thumbnailWidth;
+		canvas.style.height = thumbnailHeight;
 		ctx.drawImage(image, 0, 0, image.width, image.height);
 
 		canvasContainer.style.width = `${thumbnailWidth}px`;
 		canvasContainer.style.height = `${thumbnailHeight}px`;
 
-		// let annotateCanvas = document.getElementById('annotate');
-		// annotateCanvas.width = thumbnailWidth;
-		// annotateCanvas.height = thumbnailHeight;
+		fabricCanvas.upperCanvasEl.width = image.width;
+		fabricCanvas.upperCanvasEl.height = image.height;
+		fabricCanvas.upperCanvasEl.style.width = thumbnailWidth;
+		fabricCanvas.upperCanvasEl.style.height = thumbnailHeight;
+
+		fabricCanvas.wrapperEl.style.width = thumbnailWidth;
+		fabricCanvas.wrapperEl.style.height = thumbnailHeight;
 	}
 }
 
@@ -107,11 +113,14 @@ function loadVideoImage() {
 
 function initAnnotations() {
 	if(fabricCanvas === undefined) {
-		let canvas = document.getElementById('annotate');
+		// let canvas = document.getElementById('annotate');
+		let canvas = document.getElementById('thumbnail');
 	
 		fabricCanvas = new fabric.Canvas(canvas, {
 			isDrawingMode: true
 		});
+
+		fabricCanvas.freeDrawingBrush.width = 10;
 	}
 
 	fabricCanvas.clear();
