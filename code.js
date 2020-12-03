@@ -62,20 +62,29 @@ function loadTestImage() {
 
 		canvas.width = image.width;
 		canvas.height = image.height;
-		canvas.style.width = thumbnailWidth;
-		canvas.style.height = thumbnailHeight;
-		ctx.drawImage(image, 0, 0, image.width, image.height);
+		
+		
 
 		canvasContainer.style.width = `${thumbnailWidth}px`;
 		canvasContainer.style.height = `${thumbnailHeight}px`;
 
-		fabricCanvas.upperCanvasEl.width = image.width;
-		fabricCanvas.upperCanvasEl.height = image.height;
-		fabricCanvas.upperCanvasEl.style.width = thumbnailWidth;
-		fabricCanvas.upperCanvasEl.style.height = thumbnailHeight;
+		// fabricCanvas.upperCanvasEl.width = image.width;
+		// fabricCanvas.upperCanvasEl.height = image.height;
 
-		fabricCanvas.wrapperEl.style.width = thumbnailWidth;
-		fabricCanvas.wrapperEl.style.height = thumbnailHeight;
+		fabricCanvas.setDimensions({width: image.width, height: image.height});
+		fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
+
+		// canvas.style.width = thumbnailWidth;
+		// canvas.style.height = thumbnailHeight;
+		// fabricCanvas.upperCanvasEl.style.width = thumbnailWidth;
+		// fabricCanvas.upperCanvasEl.style.height = thumbnailHeight;
+
+		// fabricCanvas.wrapperEl.style.width = thumbnailWidth;
+		// fabricCanvas.wrapperEl.style.height = thumbnailHeight;
+
+		// fabricCanvas.Image(image);
+		// fabricCanvas.setBackgroundImage(image);
+		ctx.drawImage(image, 0, 0, image.width, image.height);
 	}
 }
 
@@ -113,8 +122,8 @@ function loadVideoImage() {
 
 function initAnnotations() {
 	if(fabricCanvas === undefined) {
-		// let canvas = document.getElementById('annotate');
-		let canvas = document.getElementById('thumbnail');
+		let canvas = document.getElementById('annotate');
+		// let canvas = document.getElementById('thumbnail');
 	
 		fabricCanvas = new fabric.Canvas(canvas, {
 			isDrawingMode: true
@@ -138,7 +147,8 @@ function copyCanvas() {
 		info(`thumbnail size: ${thumbnailWidth}, ${thumbnailHeight}`);
 		info(`thumbnail location: ${thumbnailX}, ${thumbnailY}`);
 		info(`hidden size: ${hiddenCanvas.width}, ${hiddenCanvas.height}`);
-		ctx.drawImage(annotateCanvas, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+		// ctx.drawImage(annotateCanvas, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+		ctx.drawImage(annotateCanvas, 0, 0);
 	} catch(error) {
 		info(error);
 	}
@@ -195,11 +205,16 @@ async function save(){
 		// ctx.drawImage(vid, 0,0); // the video
 
 		// let canvas = document.getElementById('canvas');
+
+		let annotateCanvas = document.getElementById('annotate');
+		let thumnailCanvas = document.getElementById('thumbnail');
+		let ctx = thumnailCanvas.getContext('2d');
+		ctx.drawImage(annotateCanvas, 0, 0);
 		
 		let blob = await new Promise((res, rej)=>{
-			let canvas = document.getElementById('thumbnail');
-			canvas.toBlob(res, 'image/jpeg');
-			// hiddenCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+			// let canvas = document.getElementById('thumbnail');
+			// canvas.toBlob(res, 'image/jpeg');
+			thumnailCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
 		});
 
 		info('downloading');
