@@ -1,6 +1,18 @@
 /**
  * Various links
  * https://stackoverflow.com/questions/46882550/how-to-save-a-jpg-image-video-captured-with-webcam-in-the-local-hard-drive-with
+ * http://fabricjs.com/freedrawing
+ * https://github.com/fabricjs/fabric.js/tree/master/src
+ * 
+ * Notes:
+ * - The fabric API seems to do what we want, but the documentation is hard to follow. I mostly had to look through their source to understand what I wanted to do
+ * - Dimensions can be tricky.
+ * 		- I wanted to capture a high res image, but shrink it enough for them to see on a mobile device
+ * 		- They should be able to annotate, but annating on a shrunken image should not pixelate when saving a high res image
+ * 		- I found the best way to do this is to set the dimensions of the canvas elements to the high res dimensions and use styling (width/height)
+ * 		  to shrink the size. This retains the resolution, yet makes it small enough to see
+ * 		- I also had to make sure the fabric containers match this same idea of a large canvas and smaller viewport. If everything lines up correctly, it
+ * 		  appears to work!
  */
 
 const MODE_VIDEO = 'VIDEO';
@@ -46,7 +58,6 @@ function loadTestImage() {
 		thumbnailX = (canvas.clientWidth / 2) - thumbnailWidth / 2;
 		thumbnailY = (canvas.clientHeight / 2) - thumbnailHeight / 2;
 	
-		// ctx.drawImage(image, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
 		canvas.width = image.width;
 		canvas.height = image.height;
 
@@ -57,8 +68,6 @@ function loadTestImage() {
 		fabricCanvas.setDimensions({width: image.width, height: image.height});
 		fabricCanvas.setDimensions({width: thumbnailWidth, height: thumbnailHeight}, {cssOnly: true});
 
-		// canvas.style.width = thumbnailWidth;
-		// canvas.style.height = thumbnailHeight;
 		ctx.drawImage(image, 0, 0, image.width, image.height);
 	}
 }
@@ -85,7 +94,6 @@ function loadVideoImage() {
 	// info(`scale: ${scale}`);
 	// info(`new: ${thumbnailWidth}, ${thumbnailHeight}`);
 	// info(`location: ${thumbnailX}, ${thumbnailY}`);
-	// ctx.drawImage(vid, thumbnailX, thumbnailY, thumbnailWidth, thumbnailHeight);
 	
 	let canvasContainer = document.getElementById('canvasContainer');
 	canvasContainer.style.width = `${thumbnailWidth}px`;
