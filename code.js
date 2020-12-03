@@ -204,14 +204,14 @@ async function save(){
 		// let canvas = document.getElementById('canvas');
 
 		let annotateCanvas = document.getElementById('annotate');
-		let thumnailCanvas = document.getElementById('thumbnail');
-		let ctx = thumnailCanvas.getContext('2d');
+		let thumbnailCanvas = document.getElementById('thumbnail');
+		let ctx = thumbnailCanvas.getContext('2d');
 		ctx.drawImage(annotateCanvas, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
 		
 		let blob = await new Promise((res, rej)=>{
 			// let canvas = document.getElementById('thumbnail');
 			// canvas.toBlob(res, 'image/jpeg');
-			thumnailCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+			thumbnailCanvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
 		});
 
 		info('downloading');
