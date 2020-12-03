@@ -206,7 +206,7 @@ async function save(){
 		let annotateCanvas = document.getElementById('annotate');
 		let thumnailCanvas = document.getElementById('thumbnail');
 		let ctx = thumnailCanvas.getContext('2d');
-		ctx.drawImage(annotateCanvas, 0, 0);
+		ctx.drawImage(annotateCanvas, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
 		
 		let blob = await new Promise((res, rej)=>{
 			// let canvas = document.getElementById('thumbnail');
